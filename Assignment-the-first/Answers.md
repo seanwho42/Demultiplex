@@ -1,14 +1,14 @@
 # Assignment the First
 
 ## Part 1
-1. Be sure to upload your Python script. Provide a link to it here:
+1. Be sure to upload your Python script. Provide a link to it here: [distributions.py](distributions.py)
 
 | File name | label | Read length | Phred encoding |
 |---|---|---|---|
-| 1294_S1_L008_R1_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R2_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R3_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R4_001.fastq.gz |  |  |  |
+| 1294_S1_L008_R1_001.fastq.gz | read1 | 101 | Phred+33 |
+| 1294_S1_L008_R2_001.fastq.gz | index1 | 8 | Phred+33 |
+| 1294_S1_L008_R3_001.fastq.gz | index2 | 8 | Phred+33 |
+| 1294_S1_L008_R4_001.fastq.gz | read2 | 101 | Phred+33 |
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
