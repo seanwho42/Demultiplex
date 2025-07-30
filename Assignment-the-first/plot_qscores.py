@@ -50,7 +50,7 @@ def main():
         plt.title("Mean Quality Score by Base Pair Index")
         plt.xlabel("# Base Pair")
         plt.ylabel("Mean Quality Score")
-        plt.savefig(f'R{read_num}.png')
+        plt.savefig(f'read{read_num+1}.png')
         plt.cla()
         
 
