@@ -42,7 +42,7 @@ def main():
                         means[j] += bioinfo.convert_phred(char)/n_reads
         # plot the thing here
         plt.bar(range(0,num_chars), means)
-        plt.title("Mean Quality Score by Base Pair Index")
+        plt.title(f'Mean Quality Score by Base Pair Index (read {read_num + 1})')
         plt.xlabel("# Base Pair")
         plt.ylabel("Mean Quality Score")
         plt.savefig(f'read{read_num+1}.png')

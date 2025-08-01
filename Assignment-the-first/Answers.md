@@ -12,8 +12,29 @@
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
-    2. **YOUR ANSWER HERE**
-    3. **YOUR ANSWER HERE**
+    ![read1.png](read1.png)
+    ![read2.png](read2.png)
+    ![read3.png](read3.png)
+    ![read4.png](read4.png)
+
+    What is a good quality score cutoff for index reads and biological read pairs to utilize for sample identification and downstream analysis, respectively? Justify your answer.
+
+    2. No quality score cutoff for either.
+
+    As far as index reads are concerned, we can look into the hamming distance, or the number of positions in which the two strings are different, in order to figure out just how likely it is that an index would be misread as another index which is being used rather than simply not being identified.
+
+    I wrote a script, [hamming.py](hamming.py), in order to graph the distribution of hamming distance across all possible combinations of indices which are provided in the `indexes.txt` file on talapas.
+
+    ![hamming_hist.png](hamming_hist.png)
+
+    This shows that, in the worst-case (and least likely) scenario, the correct 3 bases would need to be not only misread, but misread to match the other index sequence exactly. The odds are unlikely enough that this is acceptably rare, and justifies not needing a q score threshold for the 
+
+    How many indexes have undetermined (N) base calls? (Utilize your command line tool knowledge. Submit the command(s) you used. CHALLENGE: use a one-line command)
+
+    3. 3328051
+    ```bash
+    zcat /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R3_001.fastq.gz | sed -n '2~4p' | grep 'N' | wc -l
+    ```
     
 ## Part 2
 1. Define the problem
