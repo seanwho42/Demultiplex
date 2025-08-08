@@ -58,7 +58,7 @@ for i, distance in enumerate(hamm_dist_frequencies):
     distances.append(distance)
     counts.append(hamm_dist_frequencies[distance])
 
-plt.bar(distances, counts, align='Center')
+plt.bar(distances, counts, align='center')
 plt.ylabel('Count')
 plt.xlim((2,9))
 plt.xlabel('Hamming distance for index pair')

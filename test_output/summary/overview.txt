@@ -1,0 +1,5 @@
+Percentage of reads
+--------------------
+matched: 40.0
+hopped: 40.0
+unknown: 20.0
