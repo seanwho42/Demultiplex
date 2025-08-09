@@ -51,19 +51,22 @@ def main():
             index_pair = (r2_lines[1], r3_lines[1])
             if index_pair in matched_pairs:
                 # write to matched pair files
+                matched_pairs[index_pair]['count'] += 1
+                # faster to get INDEX-INDEX string this way than to generate it every time
                 index_string = matched_pairs[index_pair]['index_string']
-                header_line = f'{r2_lines[0]} {index_string}\n'
-                out_key = index_string
-                write_reads(out_key, index_pair, header_line, outfile_dict, r1_lines, r4_lines, pair_dict=matched_pairs)
+
+                write_read(read = r1_lines, index_string = index_string, outfile = outfile_dict[f'{index_string}_R1'])
+                write_read(read = r4_lines, index_string = index_string, outfile = outfile_dict[f'{index_string}_R2'])
 
 
             elif index_pair in hopped_pairs:
                 # write to hopped pair files
-                # faster to do it this way than to generate the string every time
+                hopped_pairs[index_pair]['count'] += 1
+                # faster to get INDEX-INDEX string this way than to generate it every time
                 index_string = hopped_pairs[index_pair]['index_string']
-                header_line = f'{r2_lines[0]} {index_string}\n'
-                out_key = 'hopped'
-                write_reads(out_key, index_pair, header_line, outfile_dict, r1_lines, r4_lines, pair_dict=hopped_pairs)
+
+                write_read(read = r1_lines, index_string = index_string, outfile = outfile_dict['hopped_R1'])
+                write_read(read = r4_lines, index_string = index_string, outfile = outfile_dict['hopped_R2'])
 
             else:
                 # breaks loop if there is nothing being read
@@ -72,11 +75,11 @@ def main():
                     break
 
                 # write to unknown index files
-                index_string = f'{index_pair[0]}-{reverse_compliment(index_pair[1])}'
-                header_line = f'{r2_lines[0]} {index_string}\n'
-                out_key = 'unknown'
-                write_reads(out_key, index_pair, header_line, outfile_dict, r1_lines, r4_lines, pair_dict=False)
                 unknown_pairs_count += 1
+                index_string = f'{index_pair[0]}-{reverse_compliment(index_pair[1])}'
+
+                write_read(read = r1_lines, index_string = index_string, outfile = outfile_dict['unknown_R1'])
+                write_read(read = r4_lines, index_string = index_string, outfile = outfile_dict['unknown_R2'])
 
     # generate summary info files
     write_summary(matched_pairs, hopped_pairs, unknown_pairs_count)
@@ -176,24 +179,16 @@ def reverse_compliment(seq):
         rc += compliments[base]
     return rc
 
-def write_reads(out_key, index_pair, header_line, outfile_dict, r1_lines, r4_lines, pair_dict):
-    # write forward and reverse reads to respective fastq files
+def write_read(read, index_string, outfile):
     '''
-    
+    Write reads to outfile given:
+     read: a list of lines from the read we need to modify
+     index_string: string showing the two indices in 'INDEX-INDEX' format to be added to the header
+     outfile: an outfile object
     '''
-    for direction in ('R1', 'R2'):
-        read = [header_line]
-        # fill the rest of the lines with the appropriate 
-        if direction == 'R1':
-            for n in range(1,4):
-                read.append(r1_lines[n])
-        else:
-            for n in range(1,4):
-                read.append(r4_lines[n])
-
-        outfile_dict[f'{out_key}_{direction}'].writelines(read)
-        if pair_dict:
-            pair_dict[index_pair]['count'] += 1
+    outfile.write(f'{read[0].strip()} {index_string}\n')
+    for n in range(1,4):
+        outfile.write(read[n])
 
 
 def write_summary(matched_pairs, hopped_pairs, unknown_pairs_count):
@@ -201,7 +196,7 @@ def write_summary(matched_pairs, hopped_pairs, unknown_pairs_count):
     '''
     
     '''
-    print(matched_pairs.items())
+    # print(matched_pairs.items())
     matched_read_count = 0
     hopped_read_count = 0
     for values_dict in matched_pairs.values():
@@ -226,11 +221,17 @@ def write_summary(matched_pairs, hopped_pairs, unknown_pairs_count):
         hopped_tsv.write('index_pair\tnum_matches\tpercentage_of_hopped_reads\tpercentage_of_total_reads\n')
         for key, values_dict in sorted_hopped:
             hopped_tsv.write(f'{values_dict['index_string']}\t{values_dict['count']}\t{100*(values_dict['count']/hopped_read_count)}\t{100*(values_dict['count']/total_read_count)}\n')
-        
-        overview.write(f'Percentage of reads\n--------------------\n')
+         
+        overview.write(f'Read Counts\n--------------------\n')
+        overview.write(f'matched: {matched_read_count}\n')
+        overview.write(f'hopped: {hopped_read_count}\n')
+        overview.write(f'unknown: {unknown_pairs_count}\n')
+        overview.write(f'total reads: {total_read_count}\n')
+        overview.write(f'\nPercentage of reads\n--------------------\n')
         overview.write(f'matched: {100*matched_read_count/total_read_count}\n')
         overview.write(f'hopped: {100*hopped_read_count/total_read_count}\n')
         overview.write(f'unknown: {100*unknown_pairs_count/total_read_count}\n')
+
 
         
             

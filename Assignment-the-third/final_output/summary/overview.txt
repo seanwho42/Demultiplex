@@ -1,0 +1,12 @@
+Read Counts
+--------------------
+matched: 331755033
+hopped: 707740
+unknown: 30783962
+total reads: 363246735
+
+Percentage of reads
+--------------------
+matched: 91.33049275721639
+hopped: 0.19483726398807136
+unknown: 8.474669978795543

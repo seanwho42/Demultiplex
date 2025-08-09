@@ -1,5 +1,12 @@
+Read Counts
+--------------------
+matched: 1
+hopped: 1
+unknown: 1
+total reads: 3
+
 Percentage of reads
 --------------------
-matched: 40.0
-hopped: 40.0
-unknown: 20.0
+matched: 33.333333333333336
+hopped: 33.333333333333336
+unknown: 33.333333333333336
