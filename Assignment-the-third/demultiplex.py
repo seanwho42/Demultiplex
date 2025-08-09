@@ -8,7 +8,7 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description="")
-    # TODO: include the file formatting info for the index file
+    # TODO: include the file formatting info for the index file in the help? or reference to the relevant function
     parser.add_argument("-i", "--indices", help="Index file containing all indices (mention something)", required = True)
     parser.add_argument("-r1", "--read1", help="Input fastq file for read 1", required=True)
     parser.add_argument("-r2", "--read2", help="Input fastq file for read 2", required=True)
@@ -89,7 +89,13 @@ def main():
 
 
 def open_outfiles(matched_pairs):
-    # TODO: write docstring
+    # TODO: fix the docstring here so it is clearer
+    '''
+    Given a dictionary of matched pairs, opens output files for all forward and reverse reads of:
+        matched indices (fwd/rev fastqs for each index's correctly matched reads)
+        hopped incides (fwd/rev with one fastq each)
+        and unknown indices (fwd/rev with one fastq each)
+    '''
     # make sure the needed directories exist
     os.makedirs(f'{args.out}/matched', exist_ok = True)
     os.makedirs(f'{args.out}/summary', exist_ok = True)
@@ -133,10 +139,11 @@ def get_reads(r1, r2, r3, r4):
     return r1_lines, r2_lines, r3_lines, r4_lines
 
 def get_index_pairs():
-    # TODO: add docstring
+    # TODO: elaborate on expected formatting of indices file in docstring
     '''
-    Returns two dictionaries, matched_pairs and hopped_pairs.
-    {(index, rc_index) : {index_string, count}}
+    Returns two dictionaries, matched_pairs and hopped_pairs formatted as such:
+    {(index, rc_index) : {index_string: str, count: int}}
+    Takes no arguments but uses global argparse for 'indices' file
     '''
     indices = []
 
@@ -170,9 +177,8 @@ def get_index_pairs():
     return hopped_pairs, matched_pairs
 
 def reverse_compliment(seq):
-    # TODO: make a docstring here
     '''
-    returns reverse compliment
+    Returns the reverse compliment of a DNA sequence string provided as input
     '''
     rc = ''
     for base in seq.upper()[::-1]:
@@ -192,9 +198,11 @@ def write_read(read, index_string, outfile):
 
 
 def write_summary(matched_pairs, hopped_pairs, unknown_pairs_count):
-    # TODO: write a docstring here
+    # TODO: improve the docstring since it's a bit of a jumble
     '''
-    
+    Given dictionaries of the matched and hopped index pairs (containing frequency counts),
+    calculates summary information and outputs it to an overview file as well as generating
+    TSVs (from each dictionary) for analysis and potential visualization downstream
     '''
     # print(matched_pairs.items())
     matched_read_count = 0
